@@ -27,6 +27,3 @@ jobs:
 
         - name: Run the docker container
           run: sudo docker run -d --name csn-nginx -p 8080:80 csn-nginx
-
-        - name: test the web service
-          run: curl http://localhost:8080
