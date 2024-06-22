@@ -1,0 +1,32 @@
+name: test-runner
+
+on: [push]
+
+jobs:
+    setup:
+        runs-on: self-hosted
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Check current directory
+          run: pwd
+
+        - name: Check current docker services
+          run: sudo docker ps -a
+
+        - name: Stop docker container
+          run: sudo docker stop csn-nginx || true
+
+        - name: Delete the docker container
+          run: sudo docker rm csn-nginx || true
+
+        - name: Build nginx docker image
+          run: sudo docker build -t csn-nginx .
+
+        - name: Run the docker container
+          run: sudo docker run -d --name csn-nginx -p 8080:80 csn-nginx
+
+        - name: test the web service
+          run: curl http://localhost:8080
